@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class LogServer {
 	String filePath;
-	MerkleTreesNode root;
+	static MerkleTreesNode root;
 	public LogServer(String filePath) {
 		this.filePath =filePath;
 		try {
@@ -88,7 +88,7 @@ public class LogServer {
 	}
 	
 	
-	public byte[] getRootHash() {
+	public static byte[] getRootHash() {
 		if (root == null) {
 			return null;
 		}

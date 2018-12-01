@@ -47,13 +47,14 @@ public class LogServer {
 	
 	public List<MerkleTreesNode> addLayer(List<MerkleTreesNode> NodesLayer) {
 		List<MerkleTreesNode> parents = new ArrayList<MerkleTreesNode>(NodesLayer.size()/2);
+		System.out.println(NodesLayer.size()/2);
 			for (int i = 0; i < NodesLayer.size() - 1; i += 2) {
 				MerkleTreesNode M = new MerkleTreesNode(NodesLayer.get(i), NodesLayer.get(i+1));
 				parents.add(M);
 			}
 			
 			if(NodesLayer.size()%2 != 0) {
-				MerkleTreesNode M = new MerkleTreesNode(NodesLayer.get(NodesLayer.size()-1), null);
+				MerkleTreesNode M = new MerkleTreesNode(NodesLayer.get(NodesLayer.size()-1));
 				parents.add(M);
 			}
 			return parents;

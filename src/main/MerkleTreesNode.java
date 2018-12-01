@@ -38,6 +38,15 @@ public class MerkleTreesNode {
 		this.leftNode = left;
 		this.rightNode = right;
 	}
+	public MerkleTreesNode(MerkleTreesNode left) {
+		generateDigest();
+		
+		byte[] prepended = prependByteArray(new byte[]{0x01}, left.getHash());
+		this.hash = digest.digest(prepended);
+		this.beginningIndex = left.beginningIndex;
+		this.endIndex = left.endIndex;
+		this.leftNode = left;
+	}
 	
 	private byte[] prependByteArray(byte[] prepend,byte[] bytes) {
 		byte[] out = new byte[bytes.length+prepend.length];
@@ -53,7 +62,7 @@ public class MerkleTreesNode {
 	private void generateDigest() {
 		if (this.digest==null) {
 			try {
-				this.digest =  MessageDigest.getInstance("SHA256");
+				this.digest =  MessageDigest.getInstance("SHA-256");
 			} catch (NoSuchAlgorithmException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

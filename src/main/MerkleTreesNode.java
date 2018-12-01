@@ -38,14 +38,13 @@ public class MerkleTreesNode {
 		this.leftNode = left;
 		this.rightNode = right;
 	}
-	public MerkleTreesNode(MerkleTreesNode left) {
+	public MerkleTreesNode(MerkleTreesNode oddNode) {
 		generateDigest();
-		
-		byte[] prepended = prependByteArray(new byte[]{0x01}, left.getHash());
-		this.hash = digest.digest(prepended);
-		this.beginningIndex = left.beginningIndex;
-		this.endIndex = left.endIndex;
-		this.leftNode = left;
+
+		this.hash = oddNode.hash;
+		this.beginningIndex = oddNode.beginningIndex;
+		this.endIndex = oddNode.endIndex;
+		this.leftNode = oddNode;
 	}
 	
 	private byte[] prependByteArray(byte[] prepend,byte[] bytes) {

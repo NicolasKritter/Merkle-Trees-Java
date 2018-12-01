@@ -65,44 +65,6 @@ public class MerkleTreesNode {
 		}
 	}
 	
-	public static List<MerkleTreesNode> addTreeLayer(List<MerkleTreesNode> NodesLayer) {
-		List<MerkleTreesNode> parents = new ArrayList<MerkleTreesNode>(NodesLayer.size()/2);
-			for (int i = 0; i < NodesLayer.size() - 1; i += 2) {
-				MerkleTreesNode M = new MerkleTreesNode(NodesLayer.get(i), NodesLayer.get(i+1));
-				parents.add(M);
-			}
-			
-			if(NodesLayer.size()%2 != 0) {
-				MerkleTreesNode M = new MerkleTreesNode(NodesLayer.get(NodesLayer.size()-1), NodesLayer.get(NodesLayer.size()-1));
-				parents.add(M);
-			}
-			return parents;
-		}
-	
-	public static List<byte[]> navigate(int index,MerkleTreesNode node) {
-		List<byte[]> hashes = new LinkedList<>();
-		while (node!=null ) {
-		if (node.getBeginningIndex()==index && node.getEndIndex()==index) {
-			return hashes;
-			}
-		if (isInNode(index,node.getLeftNode())) {
-			hashes.add(node.getRightNode().getHash());
-			node = node.getLeftNode();
-		}else if (isInNode(index,node.getRightNode())){
-			hashes.add(node.getLeftNode().getHash());
-			node =  node.getRightNode();
-		}else {
-			node = null;
-		}
-		}
-		return hashes;
-
-	}
-	
-	public static boolean isInNode(int index, MerkleTreesNode node) {
-		return (index>=node.getBeginningIndex() && index<= node.getEndIndex());
-
-	}
 	public byte[] getHash() {
 		return hash;
 	}
@@ -122,24 +84,6 @@ public class MerkleTreesNode {
 	public int getEndIndex() {
 		return endIndex;
 	}
-
-
-	public void setLeftNode(MerkleTreesNode leftNode) {
-		this.leftNode = leftNode;
-	}
-
-	public void setRightNode(MerkleTreesNode rightNode) {
-		this.rightNode = rightNode;
-	}
-	
-	@Override
-	public String toString() {
-		return "MerkleTreesNode [hash=" +hash + ", leftNode="
-				+ leftNode.getHash() + ", rightNode=" + rightNode.getHash() + ", beginningIndex="
-				+ beginningIndex + ", endIndex=" + endIndex + "]";
-	}
-
-
-	
+		
 	
 }

@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.FileSystems;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -14,7 +13,6 @@ public class LogServer {
 	String filePath;
 	MerkleTreesNode tree;
 	List<MerkleTreesNode> liste = new LinkedList<MerkleTreesNode>();
-	int depth = 0;
 	public LogServer(String filePath) {
 		this.filePath =filePath;
 		try {
@@ -23,7 +21,7 @@ public class LogServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		tree = buildTree(liste);
+		tree = MerkleTreesUtils.buildTree(liste);
 		System.out.println(tree);
 	}
 
@@ -40,17 +38,7 @@ public class LogServer {
 			}
 		}
 	}
-	private MerkleTreesNode buildTree(List<MerkleTreesNode> list) {
-		if (list.isEmpty()) {return new MerkleTreesNode("", 0);}
-		List<MerkleTreesNode> layer = MerkleTreesNode.addTreeLayer(list);
-		depth=1;
-		while(layer.size()!=1) {
-			System.out.println(layer.size());
-			layer=MerkleTreesNode.addTreeLayer(layer);
-			depth+=1;
-		}
-		return layer.get(0);
-	}
+
 	
 
 	public void appendEvent(String log) throws IOException {
@@ -81,7 +69,7 @@ public class LogServer {
 	}
 	
 	public List<byte[]> genPath(int i) {
-		return MerkleTreesNode.navigate(i, tree);
+		return MerkleTreesUtils.navigate(i, tree);
 	}
 	public byte[] genProof(int i) {
 		return null;

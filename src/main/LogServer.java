@@ -1,6 +1,9 @@
 package main;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -50,9 +53,26 @@ public class LogServer {
 	}
 	
 
-	public void appendEvent(String log) {
-		
+	public void appendEvent(String log) throws IOException {
+		try(FileWriter fw = new FileWriter(filePath, true);
+			    BufferedWriter bw = new BufferedWriter(fw);
+			    PrintWriter out = new PrintWriter(bw))
+			{
+			    out.println(log);
+			} catch (IOException e) {  
+			}
 	}
+	public void appendEvent(List<String> logs) throws IOException {
+		try(FileWriter fw = new FileWriter(filePath, true);
+			    BufferedWriter bw = new BufferedWriter(fw);
+			    PrintWriter out = new PrintWriter(bw))
+			{
+			for(String s: logs)
+			    out.println(s);
+			} catch (IOException e) {  
+			}
+	}
+	
 	public byte[] getRootHash() {
 		if (tree == null) {
 			return null;

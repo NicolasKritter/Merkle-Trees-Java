@@ -35,6 +35,8 @@ public class MerkleTreesNode {
 		this.hash = digest.digest(concat);
 		this.beginningIndex = left.beginningIndex;
 		this.endIndex = right.endIndex;
+		this.leftNode = left;
+		this.rightNode = right;
 	}
 	
 	private byte[] prependByteArray(byte[] prepend,byte[] bytes) {

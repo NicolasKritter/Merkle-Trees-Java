@@ -1,6 +1,9 @@
 package main;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +11,7 @@ import java.util.Scanner;
 
 public class LogServer {
 	String filePath;
-	MerkleTreesNode tree;
+	MerkleTreesNode root;
 	public LogServer(String filePath) {
 		this.filePath =filePath;
 		try {
@@ -40,6 +43,7 @@ public class LogServer {
 			while(Layer.size()!=1) {
 				Layer=addLayer(Layer);
 			}
+			this.root=Layer.get(0);			
 			
 			
 		}
@@ -63,14 +67,32 @@ public class LogServer {
 	
 	
 	
-	public void appendEvent(String log) {
-		
+	public void appendEvent(String log) throws IOException {
+		try(FileWriter fw = new FileWriter("myfile.txt", true);
+			    BufferedWriter bw = new BufferedWriter(fw);
+			    PrintWriter out = new PrintWriter(bw))
+			{
+			    out.println(log);
+			} catch (IOException e) {  
+			}
 	}
+	public void appendEvent(List<String> logs) throws IOException {
+		try(FileWriter fw = new FileWriter("myfile.txt", true);
+			    BufferedWriter bw = new BufferedWriter(fw);
+			    PrintWriter out = new PrintWriter(bw))
+			{
+			for(String s: logs)
+			    out.println(s);
+			} catch (IOException e) {  
+			}
+	}
+	
+	
 	public byte[] getRootHash() {
-		if (tree == null) {
+		if (root == null) {
 			return null;
 		}
-		return tree.getHash();
+		return root.getHash();
 	}
 	public byte[] genPath(int i) {
 		

@@ -21,7 +21,7 @@ public class MerkleTreesUtils {
 			return parents;
 		}
 	
-	public static List<byte[]> navigate(int index,MerkleTreesNode node) {
+	public static List<byte[]> genPath(int index,MerkleTreesNode node) {
 		List<byte[]> hashes = new LinkedList<>();
 		while (node!=null ) {
 		if (node.getBeginningIndex()==index && node.getEndIndex()==index) {
@@ -72,4 +72,38 @@ public class MerkleTreesUtils {
 		MerkleTreesNode newTree = buildTree(list);
 		return mergeTrees(tree, newTree);
 	}
+	
+	
+	public static List<byte[]> genProof(int i,MerkleTreesNode build) {
+		List<byte[]> result = new ArrayList<>();
+//		if (0 < i && i < index) {
+			MerkleTreesNode temp = build;
+			while (temp!=null && temp.getEndIndex()!=i ) {
+					if (isInNode(i,temp.getLeftNode())) {
+						System.out.println("left");
+						result.add(temp.getRightNode().getHash());
+						temp = temp.getLeftNode();
+					}
+					else if (isInNode(i,temp.getRightNode())){
+						result.add(temp.getLeftNode().getHash());
+						System.out.println("right");
+						temp = temp.getRightNode();
+					}else {
+						result.add(null);
+						temp=null;
+					}
+				
+			}
+			if (temp!=null) {
+				result.add(temp.getHash());
+			}
+			return result;
+//		}
+//		else {
+//			System.out.println("i non valide");
+//			return null;
+//		}
+	}
+	
+	
 }

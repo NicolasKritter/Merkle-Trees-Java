@@ -21,10 +21,8 @@ import main.MerkleTreesUtils;
 class LogServerTest {
 	
 	static final String[] testLogPaire = {"l1","l2","l3","l4","l5","l6","l7","l8"};
-	static final String[] testLogInPaire = {"l1","l2","l3","l4","l5","l6","l7","l8","l9"};
 
 	static List<MerkleTreesNode> listePaire =  new LinkedList<>();
-	static List<MerkleTreesNode> listeInPaire =  new LinkedList<>();
 
 	static int index = 0;
 	static MerkleTreesNode tree;
@@ -52,10 +50,8 @@ class LogServerTest {
 			index+=1;
 			node = new MerkleTreesNode(log, index);
 			System.out.println(node.getHash());
-			listeInPaire.add(node);
 			listePaire.add(node);
 		}
-		listeInPaire.add(new MerkleTreesNode(testLogInPaire[index], index+1));
 		tree= MerkleTreesUtils.buildTree(listePaire);
 	} 
 	
@@ -63,9 +59,8 @@ class LogServerTest {
 	
 	@Test
 	void genPathpoure4() {
-		List<byte[]>list = MerkleTreesUtils.navigate(4,tree);
+		List<byte[]>list = MerkleTreesUtils.genPath(4,tree);
 		assertNotNull(list);
-		System.out.println(list);
 		//on reprend l'exemple du cours
 		//le dernier élément est le hash de e3
 		MerkleTreesNode h12 = tree.getLeftNode().getLeftNode();
@@ -78,10 +73,45 @@ class LogServerTest {
 	}
 	
 	@Test
-	void genPathpoureNotFound() {
-		List<byte[]>list = MerkleTreesUtils.navigate(9,tree);
+	void genProofpoure6() {
+		List<byte[]>list = MerkleTreesUtils.genProof(6,tree);
 		assertNotNull(list);
-		System.out.println(list);
+		//on reprend l'exemple du cours
+		//le dernier élément est le hash de e3
+		assertEquals(3, list.size(),"h6 len");
+		assertEquals(tree.getRightNode().getLeftNode().getHash(), list.get(2),"h56");
+		assertEquals(tree.getRightNode().getRightNode().getHash(), list.get(1),"h78");
+		assertEquals(tree.getLeftNode().getHash(), list.get(0),"h14");
+
+	
+	}
+	@Test
+	void genProofpoure7() {
+		List<byte[]>list = MerkleTreesUtils.genProof(7,tree);
+		assertNotNull(list);
+		//on reprend l'exemple du cours
+		//le dernier élément est le hash de e3
+		assertEquals(4, list.size());
+		assertEquals(listePaire.get(6).getHash(), list.get(3),"h7");
+		assertEquals(listePaire.get(7).getHash(), list.get(2),"h8");
+		assertEquals(tree.getRightNode().getLeftNode().getHash(), list.get(1),"h56");
+		assertEquals(tree.getLeftNode().getHash(), list.get(0),"h14");
+
+	
+	}
+	@Test
+	void genProofpoureNotFound() {
+		List<byte[]>list = MerkleTreesUtils.genProof(9,tree);
+		assertNotNull(list);
+		//on reprend l'exemple du cours
+		//le dernier élément est le hash de e3
+		assertEquals(null, list.get(list.size()-1),"-1");
+	}
+	
+	@Test
+	void genPathpoureNotFound() {
+		List<byte[]>list = MerkleTreesUtils.genPath(9,tree);
+		assertNotNull(list);
 		//on reprend l'exemple du cours
 		//le dernier élément est le hash de e3
 		assertEquals(null, list.get(list.size()-1),"-1");

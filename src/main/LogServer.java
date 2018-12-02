@@ -71,10 +71,10 @@ public class LogServer {
 	}
 	
 	public List<byte[]> genPath(int i) {
-		return MerkleTreesUtils.navigate(i, tree);
+		return MerkleTreesUtils.genPath(i, tree);
 	}
-	public byte[] genProof(int i) {
-		return null;
+	public List<byte[]> genProof(int i) {
+		return MerkleTreesUtils.genProof(i, tree);
 	}
 	
 	public String getFilePath() {

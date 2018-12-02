@@ -12,22 +12,25 @@ import java.util.Scanner;
 public class LogServer {
 	String filePath;
 	MerkleTreesNode tree;
-	List<MerkleTreesNode> liste = new LinkedList<MerkleTreesNode>();
+	int index = 0;
 	public LogServer(String filePath) {
 		this.filePath =filePath;
 		try {
-			readLogFile(filePath);
+			List<MerkleTreesNode> liste  = readLogFile(filePath);
+			tree = MerkleTreesUtils.buildTree(liste);
+			System.out.println(tree);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		tree = MerkleTreesUtils.buildTree(liste);
-		System.out.println(tree);
+		
+	
 	}
 
 
-	private void readLogFile(String path) throws IOException {
-		int index = 0;
+	private List<MerkleTreesNode> readLogFile(String path) throws IOException {
+
+		List<MerkleTreesNode> liste = new LinkedList<MerkleTreesNode>();
 		try(Scanner scan = new Scanner(FileSystems.getDefault().getPath(path))) {
 			//lecture via scanner
 			String word; 
@@ -37,6 +40,7 @@ public class LogServer {
 				 index+=1;
 			}
 		}
+		return liste;
 	}
 
 	
@@ -51,14 +55,12 @@ public class LogServer {
 			}
 	}
 	public void appendEvent(List<String> logs) throws IOException {
-		try(FileWriter fw = new FileWriter(filePath, true);
-			    BufferedWriter bw = new BufferedWriter(fw);
-			    PrintWriter out = new PrintWriter(bw))
-			{
-			for(String s: logs)
-			    out.println(s);
-			} catch (IOException e) {  
-			}
+		List<MerkleTreesNode> liste = new LinkedList<MerkleTreesNode>();
+		for(String s: logs) {
+			 liste.add(new MerkleTreesNode(s, index));
+			 index+=1;
+		}
+		tree = MerkleTreesUtils.addNodestoTree(tree, liste);
 	}
 	
 	public byte[] getRootHash() {

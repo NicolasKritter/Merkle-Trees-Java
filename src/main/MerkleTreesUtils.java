@@ -55,8 +55,21 @@ public class MerkleTreesUtils {
 	}
 	
 	
-	public static boolean isInNode(int index, MerkleTreesNode node) {
+	private static boolean isInNode(int index, MerkleTreesNode node) {
 		return (index>=node.getBeginningIndex() && index<= node.getEndIndex());
 
+	}
+	
+	private static MerkleTreesNode mergeTrees(MerkleTreesNode node1,MerkleTreesNode node2) {
+		if (node1.getEndIndex()<=node2.getBeginningIndex()) {
+			return new MerkleTreesNode(node1, node2);
+		}else {
+			return new MerkleTreesNode(node2, node1);
+		}
+	}
+	
+	public static MerkleTreesNode addNodestoTree(MerkleTreesNode tree,List<MerkleTreesNode> list) {
+		MerkleTreesNode newTree = buildTree(list);
+		return mergeTrees(tree, newTree);
 	}
 }

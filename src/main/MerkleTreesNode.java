@@ -29,17 +29,19 @@ public class MerkleTreesNode {
 	
 	public MerkleTreesNode(MerkleTreesNode left,MerkleTreesNode right) {
 		generateDigest();
-		
-		byte[] prepended = prependByteArray(new byte[]{0x01}, left.getHash());
-		byte[] concat = prependByteArray(prepended, right.getHash());
-		this.hash = digest.digest(concat);
+		this.hash = makeHashDigest(left.getHash(),right.getHash());
 		this.beginningIndex = left.beginningIndex;
 		this.endIndex = right.endIndex;
 		this.leftNode = left;
 		this.rightNode = right;
 	}
 	
-	private byte[] prependByteArray(byte[] prepend,byte[] bytes) {
+	public static byte[]  makeHashDigest(byte[] left,byte[] right) {
+		byte[] prepended = prependByteArray(new byte[]{0x01}, left);
+		byte[] concat = prependByteArray(prepended, right);
+		return digest.digest(concat);
+	}
+	private static byte[] prependByteArray(byte[] prepend,byte[] bytes) {
 		byte[] out = new byte[bytes.length+prepend.length];
 		for (int i = 0; i < prepend.length; i++) {
 			out[i] = prepend[i];

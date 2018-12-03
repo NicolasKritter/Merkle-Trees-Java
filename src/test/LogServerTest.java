@@ -3,18 +3,15 @@ package test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.internal.runners.statements.Fail;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import main.LogServer;
 import main.MerkleTreesNode;
 import main.MerkleTreesUtils;
 

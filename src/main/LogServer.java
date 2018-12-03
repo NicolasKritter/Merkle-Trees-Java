@@ -1,19 +1,24 @@
 package main;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.FileSystems;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-public class LogServer {
+import interfaces.LogServerInterface;
+
+public class LogServer extends UnicastRemoteObject implements LogServerInterface{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String filePath;
 	MerkleTreesNode tree;
-	int index = 0;
-	public LogServer(String filePath) {
+	private int index = 0;
+	public LogServer(String filePath) throws RemoteException  {
 		this.filePath =filePath;
 		try {
 			List<MerkleTreesNode> liste  = readLogFile(filePath);
@@ -44,17 +49,7 @@ public class LogServer {
 	}
 
 	
-
-	public void appendEvent(String log) throws IOException {
-		try(FileWriter fw = new FileWriter(filePath, true);
-			    BufferedWriter bw = new BufferedWriter(fw);
-			    PrintWriter out = new PrintWriter(bw))
-			{
-			    out.println(log);
-			} catch (IOException e) {  
-			}
-	}
-	public void appendEvent(List<String> logs) throws IOException {
+	public void appendEvent(List<String> logs) {
 		List<MerkleTreesNode> liste = new LinkedList<MerkleTreesNode>();
 		for(String s: logs) {
 			 liste.add(new MerkleTreesNode(s, index));
@@ -81,4 +76,7 @@ public class LogServer {
 		return filePath;
 	}
 	
+	public int getIndex() {
+		return index;
+	}
 }
